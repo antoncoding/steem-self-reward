@@ -1,7 +1,7 @@
 var fs = require("fs");
 const steem = require('steem');
 var utils = require('./utils');
-var parent_comment_permlink = 're-bidseption-2ttjue-we-re-promoting-following-tags-worldcup-fifa-paying-100-to-delegators-20180628t214013302z';
+var parent_comment_permlink = null;
 var version = '1.0';
 start();
 
@@ -39,7 +39,7 @@ function startProcess(){
                   parent_comment_permlink = 're-' + post_author.replace(/\./g, '') + '-' + post_permlink + '-' + new Date().toISOString().replace(/-|:|\./g, '').toLowerCase();
                   var content = config.parent_comment_content;
                   // Broadcast Commments
-                  steem.broadcast.comment(config.posting_key, post_author, post_permlink, account.name, parent_comment_permlink, 'self-reward', content, '{"app":"self-reward/1.0.0"}', function (err, result) {
+                  steem.broadcast.comment(config.posting_key, post_author, post_permlink, account.name, parent_comment_permlink, 'self-reward', content, '{"app":"self-reward/'+version+'"}', function (err, result) {
                     if (!err && result) {
                       utils.log('Comment posted: ' + parent_comment_permlink);
                       // Vote for the first time: on parent comment
@@ -60,7 +60,7 @@ function startProcess(){
           child_comment_permlink = 're-' + account.name.replace(/\./g, '') + '-' + parent_comment_permlink + '-' + new Date().toISOString().replace(/-|:|\./g, '').toLowerCase();
           var content = config.parent_comment_content;
           // Broadcast Child Commments
-          steem.broadcast.comment(config.posting_key, account.name, parent_comment_permlink, account.name, child_comment_permlink, 'self-reward', content, '{"app":"self-reward/1.0.0"}', function (err, result) {
+          steem.broadcast.comment(config.posting_key, account.name, parent_comment_permlink, account.name, child_comment_permlink, 'self-reward', content, '{"app":"self-reward/'+version+'"}', function (err, result) {
             if (!err && result) {
               utils.log('Comment posted: ' + parent_comment_permlink);
 
