@@ -1,0 +1,16 @@
+{
+  "rpc_nodes": [
+    "https://api.steemit.com",
+    "https://rpc.buildteam.io",
+    "https://steemd.minnowsupportproject.org",
+    "https://steemd.privex.io",
+    "https://gtg.steem.house:8090"
+  ],
+  "account": "account_name",
+  "memo_key": "private_memo_key",
+  "posting_key": "private_posting_key",
+  "active_key": "private_active_key",
+  
+  "target_author":"bidseption",
+  "target_permlink":"2ttjue-we-re-promoting-following-tags-worldcup-fifa-paying-100-to-delegators"
+}
