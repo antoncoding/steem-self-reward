@@ -3,6 +3,7 @@ const steem = require('steem');
 var utils = require('./utils');
 var parent_comment_permlink = null;
 var version = '1.0';
+var error_count = 0;
 start();
 
 function start(){
@@ -13,7 +14,7 @@ function start(){
   utils.updateSteemVariables();
   startProcess();
 
-  setInterval(startProcess, 10*60*000);
+  setInterval(startProcess, 10*60*1000);
 }
 
 function startProcess(){
@@ -26,7 +27,7 @@ function startProcess(){
       var threshold = config.threshold;
       if (vp >= threshold) {
         // Time to Upvote your own comment!
-        utils.log('100% Voting power!');
+        utils.log('Voting Power threshold ' + threshold/100 +' reached!');
 
         if(!parent_comment_permlink){
           // We Dont have a parent comment under permlink yet, create one
@@ -43,7 +44,7 @@ function startProcess(){
                     if (!err && result) {
                       utils.log('Comment posted: ' + parent_comment_permlink);
                       // Vote for the first time: on parent comment
-                      vote(account.name, parent_comment_permlink, 10000, 1)
+                      vote(account.name, parent_comment_permlink, config.voting_power, 1)
                     } else {
                       logError('Error posting comment: ' + parent_comment_permlink);
                     }
@@ -65,17 +66,22 @@ function startProcess(){
               utils.log('Comment posted: ' + parent_comment_permlink);
 
               // Vote on child_comment
-              vote(account.name, child_comment_permlink, 10000, 1)
+              vote(account.name, child_comment_permlink, config.voting_power, 1)
 
             } else {
               logError('Error posting comment: ' + parent_comment_permlink);
             }
           });
         }
-      }else{
-        utils.log('Current Power: '+vp/100);
       }
+      else{
+        var wait_time = utils.timeTilFullPower(vp);
+        utils.log('Current Power: '+vp/100 + ' Time Tils next vote: '+wait_time);
+      }
+    }else{
+      utils.log('Account Fetch Error')
     }
+
     }
   });
 }
@@ -84,16 +90,6 @@ function vote(author, permlink, weight,retries){
   steem.broadcast.vote(config.posting_key, account.name, author, permlink, weight, function (err, result) {
     if (!err && result) {
       utils.log(utils.format(weight / 100) + '% vote cast for: @' + author + '/' + permlink);
-
-      logError('Error sending vote for: @' + author + '/' + permlink + ', Error: ' + err);
-
-      // Try again on error
-      if(retries < 2)
-        setTimeout(function() { vote(author, permlink, weight, retries + 1); }, 10000);
-      else {
-        utils.log('============= Vote transaction failed three times for: @' + author + '/' + permlink + ' ===============');
-
-      }
     }
   });
 }
