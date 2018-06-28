@@ -43,7 +43,7 @@ var HOURS = 60 * 60;
        }
      });
 
-     setTimeout(updateSteemVariables, 180 * 1000)
+     setTimeout(updateSteemVariables, 600 * 1000)
  }
 
  function vestsToSP(vests) { return vests / 1000000 * steem_per_mvests; }

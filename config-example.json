@@ -10,7 +10,8 @@
   "memo_key": "private_memo_key",
   "posting_key": "private_posting_key",
   "active_key": "private_active_key",
-  
+
   "target_author":"bidseption",
-  "target_permlink":"2ttjue-we-re-promoting-following-tags-worldcup-fifa-paying-100-to-delegators"
+  "target_permlink":"2ttjue-we-re-promoting-following-tags-worldcup-fifa-paying-100-to-delegators",
+  "threshold":10000
 }
