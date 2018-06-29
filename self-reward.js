@@ -24,7 +24,7 @@ function startProcess(){
     if (account){
       // Load the current voting power of the account
       var vp = utils.getVotingPower(account);
-      var threshold = config.threshold;
+      var threshold = config.voting_power_threshold;
       if (vp >= threshold) {
         // Time to Upvote your own comment!
         utils.log('Voting Power threshold ' + threshold/100 +' reached!');
@@ -44,7 +44,7 @@ function startProcess(){
                     if (!err && result) {
                       utils.log('Comment posted: ' + parent_comment_permlink);
                       // Vote for the first time: on parent comment
-                      vote(account.name, parent_comment_permlink, config.voting_power, 1)
+                      vote(account.name, parent_comment_permlink, config.voting_weight, 1)
                     } else {
                       logError('Error posting comment: ' + parent_comment_permlink);
                     }
@@ -66,7 +66,7 @@ function startProcess(){
               utils.log('Comment posted: ' + parent_comment_permlink);
 
               // Vote on child_comment
-              vote(account.name, child_comment_permlink, config.voting_power, 1)
+              vote(account.name, child_comment_permlink, config.voting_weight, 1)
 
             } else {
               logError('Error posting comment: ' + parent_comment_permlink);
