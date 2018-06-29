@@ -1,3 +1,8 @@
+/*
+Author: MattyIce (https://github.com/MattyIce/)
+Cloned from: https://github.com/MattyIce/postpromoter/blob/master/utils.js
+*/
+
 const steem = require('steem');
 var fs = require("fs");
 
