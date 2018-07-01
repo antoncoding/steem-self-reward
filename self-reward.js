@@ -75,7 +75,7 @@ function startProcess(){
         }
       }
       else{
-        var wait_time = utils.timeTilFullPower(vp);
+        var wait_time = utils.timeTilNextVote(vp, config.voting_power_threshold);
         if(config.detail_logging){
           utils.log('Current Power: '+ vp/100 + '%');
           utils.log('Time Tils next vote: '+ wait_time/60 + ' mins.');

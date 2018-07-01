@@ -107,6 +107,10 @@ function timeTilFullPower(cur_power){
      return (STEEMIT_100_PERCENT - cur_power) * STEEMIT_VOTE_REGENERATION_SECONDS / STEEMIT_100_PERCENT;
  }
 
+ function timeTilNextVote(cur_power, voting_power_threshold){
+   return (voting_power_threshold - cur_power) * STEEMIT_VOTE_REGENERATION_SECONDS / STEEMIT_100_PERCENT;
+ }
+
  function getVestingShares(account) {
      var effective_vesting_shares = parseFloat(account.vesting_shares.replace(" VESTS", ""))
        + parseFloat(account.received_vesting_shares.replace(" VESTS", ""))
