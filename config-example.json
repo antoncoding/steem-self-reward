@@ -13,5 +13,6 @@
   "parent_comment_content":"This is a comment created for self-reward.",
   "voting_power_threshold":10000,
   "voting_weight":10000,
+  "interval_milisec":300000,
   "detail_logging":true
 }

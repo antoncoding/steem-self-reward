@@ -14,7 +14,7 @@ function start(){
   utils.updateSteemVariables();
   startProcess();
 
-  setInterval(startProcess, 10*60*1000);
+  setInterval(startProcess, config.interval_milisec);
 }
 
 function startProcess(){

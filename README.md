@@ -34,6 +34,8 @@ Set the options in `config.json`:
   "parent_comment_content":"This is a comment created for self-reward.",
   "voting_power_threshold":10000, // create new comment and vote when 100% voting power reached.
   "voting_weight":10000, // Vote with 100% voting weight
+  "interval_milisec":300000, // check interval in 1/1000 sec, 300 secs -> 5 mins
+  "detail_logging":true
 }
 
 ```
