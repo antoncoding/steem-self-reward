@@ -6,12 +6,27 @@
     "https://steemd.privex.io",
     "https://gtg.steem.house:8090"
   ],
-  "account": "account_name",
-  "posting_key": "private_posting_key",
-  "target_author":"self-reward",
-  "target_permlink":"save-your-wasted-sp-and-maximize-your-incom-on-steem",
-  "parent_comment_content":"This is a comment created for self-reward.",
-  "voting_power_threshold":10000,
+  "comment_poster":"posting_account_name",
+  "comment_posting_key":"posting_key",
+  "voters":[
+    {
+      "account": "voter1",
+      "posting_key": "posting_key_1"
+    },
+    {
+      "account": "voter2",
+      "posting_key" :"posting_key_2"
+    },
+    {
+      "account":"voter3",
+      "posting_key":"posting_key_3"
+    }
+  ],
+  "target_author":"antonsteemit",
+  "target_permlink":"add-promotion-tags-feature-to-voting-bot",
+  "parent_comment_content":"Trying Reinvest 2.0",
+
+  "voting_power_threshold":9500,
   "voting_weight":10000,
   "interval_milisec":300000,
   "detail_logging":true

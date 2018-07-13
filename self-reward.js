@@ -2,7 +2,7 @@ var fs = require("fs");
 const steem = require('steem');
 var utils = require('./utils');
 var parent_comment_permlink = null;
-var version = '1.0';
+var version = '2.0';
 var error_count = 0;
 start();
 
