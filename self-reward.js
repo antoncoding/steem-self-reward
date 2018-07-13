@@ -18,12 +18,12 @@ function start(){
 }
 
 function startProcess(){
-  steem.api.getAccounts([config.account], function (err, result) {
+  steem.api.getAccounts([config.voters[0].account], function (err, result) {
   if (result && !err) {
     account = result[0];
     if (account){
-      claimRewards();
-      // Load the current voting power of the account
+      // claimRewards();
+      // Load the current voting power of the MAIN VOTING account
       var vp = utils.getVotingPower(account);
       var threshold = config.voting_power_threshold;
       if (vp >= threshold) {
@@ -40,13 +40,19 @@ function startProcess(){
                   parent_comment_permlink = 're-' + post_author.replace(/\./g, '') + '-' + post_permlink + '-' + new Date().toISOString().replace(/-|:|\./g, '').toLowerCase();
                   var content = config.parent_comment_content;
                   // Broadcast Commments
-                  steem.broadcast.comment(config.posting_key, post_author, post_permlink, account.name, parent_comment_permlink, 'self-reward', content, '{"app":"self-reward/'+version+'"}', function (err, result) {
+                  steem.broadcast.comment(config.comment_posting_key, post_author, post_permlink, config.comment_poster, parent_comment_permlink, 'self-reward', content, '{"app":"self-reward/'+version+'"}', function (err, result) {
                     if (!err && result) {
                       utils.log('Comment posted: ' + parent_comment_permlink);
                       // Vote for the first time: on parent comment
-                      vote(account.name, parent_comment_permlink, config.voting_weight, 1)
+                      for (var i = 0; i < config.voters.length; i++) {
+                        var voter = config.voters[i]
+                        utils.log(`Voter: ${voter.account} : ${voter.posting_key}`);
+                        vote(config.voters[i].posting_key, config.voters[i].account, config.comment_poster, parent_comment_permlink, config.voting_weight, 1)
+                      }
+
                     } else {
                       logError('Error posting comment: ' + parent_comment_permlink);
+                      console.log(err);
                     }
                   });
                 }
@@ -58,18 +64,19 @@ function startProcess(){
         }
         else{
           // create comment under parent_comment and vote
-          child_comment_permlink = 're-' + account.name.replace(/\./g, '') + '-' + parent_comment_permlink + '-' + new Date().toISOString().replace(/-|:|\./g, '').toLowerCase();
+          child_comment_permlink = 're-' + config.comment_poster.replace(/\./g, '') + '-' + parent_comment_permlink + '-' + new Date().toISOString().replace(/-|:|\./g, '').toLowerCase();
           var content = config.parent_comment_content;
           // Broadcast Child Commments
-          steem.broadcast.comment(config.posting_key, account.name, parent_comment_permlink, account.name, child_comment_permlink, 'self-reward', content, '{"app":"self-reward/'+version+'"}', function (err, result) {
+          steem.broadcast.comment(config.comment_posting_key, config.comment_poster, parent_comment_permlink, config.comment_poster, child_comment_permlink, 'self-reward', content, '{"app":"self-reward/'+version+'"}', function (err, result) {
             if (!err && result) {
-              utils.log('Comment posted: ' + parent_comment_permlink);
-
+              utils.log('Comment posted: ' + child_comment_permlink);
               // Vote on child_comment
-              vote(account.name, child_comment_permlink, config.voting_weight, 1)
+              for (var i = 0; i < config.voters.length; i++) {
+                vote(config.voters[i].posting_key, config.voters[i].account, config.comment_poster, child_comment_permlink, config.voting_weight, 1)
+              }
 
             } else {
-              logError('Error posting comment: ' + parent_comment_permlink);
+              logError('Error posting comment: ' + child_comment_permlink);
             }
           });
         }
@@ -89,8 +96,8 @@ function startProcess(){
   });
 }
 
-function vote(author, permlink, weight,retries){
-  steem.broadcast.vote(config.posting_key, account.name, author, permlink, weight, function (err, result) {
+function vote(posting_key, voter, author, permlink, weight,retries){
+  steem.broadcast.vote(posting_key, voter, author, permlink, weight, function (err, result) {
     if (!err && result) {
       utils.log(utils.format(weight / 100) + '% vote cast for: @' + author + '/' + permlink);
     }
