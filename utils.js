@@ -154,6 +154,7 @@ function format(n, c, d, t) {
    getVotingPower: getVotingPower,
    getVoteValue: getVoteValue,
    timeTilFullPower: timeTilFullPower,
+   timeTilNextVote:timeTilNextVote,
    getVestingShares: getVestingShares,
 	 vestsToSP: vestsToSP,
    getCurrency: getCurrency,
