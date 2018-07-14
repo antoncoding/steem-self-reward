@@ -22,7 +22,6 @@ function startProcess(){
   if (result && !err) {
     account = result[0];
     if (account){
-      // claimRewards();
       // Load the current voting power of the MAIN VOTING account
       var vp = utils.getVotingPower(account);
       var threshold = config.voting_power_threshold;
@@ -103,55 +102,6 @@ function vote(posting_key, voter, author, permlink, weight,retries){
     }
   });
 }
-
-function claimRewards() {
-
-  // Make api call only if you have actual reward
-  if (parseFloat(account.reward_steem_balance) > 0 || parseFloat(account.reward_sbd_balance) > 0 || parseFloat(account.reward_vesting_balance) > 0) {
-    steem.broadcast.claimRewardBalance(config.posting_key, config.account, account.reward_steem_balance, account.reward_sbd_balance, account.reward_vesting_balance, function (err, result) {
-      if (err) {
-        utils.log('Error claiming rewards...');
-      }
-
-      if (result) {
-        var rewards_message = "$$$ ==> Rewards Claim";
-        if (parseFloat(account.reward_sbd_balance) > 0) { rewards_message = rewards_message + ' SBD: ' + parseFloat(account.reward_sbd_balance); }
-        if (parseFloat(account.reward_steem_balance) > 0) { rewards_message = rewards_message + ' STEEM: ' + parseFloat(account.reward_steem_balance); }
-        if (parseFloat(account.reward_vesting_balance) > 0) { rewards_message = rewards_message + ' VESTS: ' + parseFloat(account.reward_vesting_balance); }
-
-        utils.log(rewards_message);
-
-        // If there are liquid SBD rewards, withdraw them to the specified account
-        if(parseFloat(account.reward_sbd_balance) > 0 && config.post_rewards_withdrawal_account && config.post_rewards_withdrawal_account != '') {
-
-          // Send liquid post rewards to the specified account
-          steem.broadcast.transfer(config.active_key, config.account, config.post_rewards_withdrawal_account, account.reward_sbd_balance, 'Liquid Post Rewards Withdrawal', function (err, response) {
-            if (err)
-              utils.log(err, response);
-            else {
-              utils.log('$$$ Auto withdrawal - liquid post rewards: ' + account.reward_sbd_balance + ' sent to @' + config.post_rewards_withdrawal_account);
-            }
-          });
-        }
-
-				// If there are liquid STEEM rewards, withdraw them to the specified account
-        if(parseFloat(account.reward_steem_balance) > 0 && config.post_rewards_withdrawal_account && config.post_rewards_withdrawal_account != '') {
-
-          // Send liquid post rewards to the specified account
-          steem.broadcast.transfer(config.active_key, config.account, config.post_rewards_withdrawal_account, account.reward_steem_balance, 'Liquid Post Rewards Withdrawal', function (err, response) {
-            if (err)
-              utils.log(err, response);
-            else {
-              utils.log('$$$ Auto withdrawal - liquid post rewards: ' + account.reward_steem_balance + ' sent to @' + config.post_rewards_withdrawal_account);
-            }
-          });
-        }
-      }
-    });
-  }
-}
-
-
 
 // From Postpromoter
 function logError(message) {
