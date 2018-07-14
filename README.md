@@ -26,8 +26,22 @@ Set the options in `config.json`:
     "https://rpc.buildteam.io",
     "https://steemd.minnowsupportproject.org",
     ],
-  "account": "account_name",
-  "posting_key": "private_posting_key",
+    "comment_poster":"account_to_comment",
+    "comment_posting_key":"posting_key",
+    "voters":[
+      {
+        "account": "voter1",
+        "posting_key": "posting_key_1"
+      },
+      {
+        "account": "voter2",
+        "posting_key" :"posting_key_2"
+      },
+      {
+        "account":"voter3",
+        "posting_key":"posting_key_3"
+      }
+    ],
 
   "target_author":"self-reward", // Info about target post you want to create your comments on, feel free to just use this one :)
   "target_permlink":"save-your-wasted-sp-and-maximize-your-incom-on-steem",
